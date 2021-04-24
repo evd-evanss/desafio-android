@@ -1,22 +1,22 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
-
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.picpay.desafio.android"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         vectorDrawables.useSupportLibrary = true
-
+        buildConfigField("String", "BASE_URL", "\"http://careers.picpay.com/tests/mobdev/\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -28,7 +28,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    viewBinding {
+        enabled = true
+    }
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
@@ -42,8 +44,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     implementation "androidx.core:core-ktx:$core_ktx_version"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
@@ -56,7 +56,20 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayout_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_lifecycle_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    //Chuck
+    debugImplementation "com.readystatesoftware.chuck:library:$chuck"
+    releaseImplementation "com.readystatesoftware.chuck:library-no-op:$chuck"
+
+    implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
+    implementation "androidx.activity:activity-ktx:$activity_ktx_version"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
