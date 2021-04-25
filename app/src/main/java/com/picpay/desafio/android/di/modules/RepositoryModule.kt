@@ -1,7 +1,7 @@
 package com.picpay.desafio.android.di.modules
 
-import com.picpay.desafio.android.data.repository.UserRepository
-import com.picpay.desafio.android.data.repository.UserRepositoryImpl
+import com.picpay.desafio.android.data.repository.ContactsRepository
+import com.picpay.desafio.android.data.repository.ContactsRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ interface RepositoryModule {
 
     @Singleton
     @Binds
-    fun userRepository(impl: UserRepositoryImpl): UserRepository
+    fun userRepository(impl: ContactsRepositoryImpl): ContactsRepository
 }
