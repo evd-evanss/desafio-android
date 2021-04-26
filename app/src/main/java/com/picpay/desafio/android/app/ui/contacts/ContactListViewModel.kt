@@ -12,9 +12,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ContactListViewModel @Inject constructor(
     private val repository: ContactsRepository
-): BaseViewModel<ContactListIntent, ContactListState> () {
+) : BaseViewModel<ContactListIntent, ContactListState>() {
 
-    private val contactList = mutableListOf<UserContact>()
+    internal val contactList = mutableListOf<UserContact>()
 
     override fun handle(intent: ContactListIntent) {
         when (intent) {
@@ -27,7 +27,7 @@ class ContactListViewModel @Inject constructor(
         when {
             isRefresh -> fetchContactsInApi()
             contactList.isEmpty() -> fetchContactsInApi()
-            else -> _state.value = ContactListState.LoadContacts(contacts = contactList)
+            else -> _state.value = ContactListState.LoadSavedContacts(contacts = contactList)
         }
     }
 
@@ -41,8 +41,7 @@ class ContactListViewModel @Inject constructor(
             contactList.addAll(contacts.toMutableList())
             _state.value = ContactListState.LoadContacts(contacts = contacts)
         },
-        onError = { error ->
-            Log.d(javaClass.name, error.message ?: "")
+        onError = {
             _state.value = ContactListState.DisplayError
         }
     )

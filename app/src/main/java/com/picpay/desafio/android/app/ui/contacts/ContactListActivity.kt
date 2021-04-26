@@ -43,6 +43,7 @@ class ContactListActivity : BaseActivity<ActivityContactsBinding>() {
     private fun setObservers() = viewModel.state.observe(this@ContactListActivity) { state ->
         when (state) {
             is ContactListState.LoadContacts -> loadContacts(contacts = state.contacts)
+            is ContactListState.LoadSavedContacts -> loadContacts(contacts = state.contacts)
             is ContactListState.DisplayError -> displayError()
             is ContactListState.DisplayRefresh -> displayRefresh(isRefresh = state.isRefresh)
         }

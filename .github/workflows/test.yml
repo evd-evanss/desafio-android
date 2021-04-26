@@ -1,0 +1,19 @@
+name: Test
+on:
+  push:
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - feat/unitary-tests
+jobs:
+  unit_tests:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Unit tests
+        run: ./gradlew test
+  android_tests:
+    runs-on: [ mac-latest ]
+    steps:
+      - uses: actions/checkout@v2
