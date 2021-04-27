@@ -1,4 +1,4 @@
-package com.picpay.desafio.android
+package com.picpay.desafio.android.app.utils.matchers
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -35,5 +35,17 @@ object RecyclerViewMatchers {
                 )
             )
         )
+    }
+
+    fun withViewAtPosition(position: Int, itemMatcher: Matcher<View?>): Matcher<View?> {
+        return object : BoundedMatcher<View?, RecyclerView?>(RecyclerView::class.java) {
+            override fun describeTo(description: Description?) {
+                itemMatcher.describeTo(description)
+            }
+            override fun matchesSafely(item: RecyclerView?): Boolean {
+                val viewHolder = item?.findViewHolderForAdapterPosition(position)
+                return viewHolder != null && itemMatcher.matches(viewHolder.itemView)
+            }
+        }
     }
 }
