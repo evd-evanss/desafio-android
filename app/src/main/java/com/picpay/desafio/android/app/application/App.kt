@@ -1,4 +1,4 @@
-package com.picpay.desafio.android.app
+package com.picpay.desafio.android.app.application
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

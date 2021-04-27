@@ -23,7 +23,7 @@ class ContactsRepositoryTest @Inject constructor()
     : ContactsRepository {
 
     override fun fetchContacts() = flow {
-        val contacts = listOf<UserContact>(
+        val contacts = listOf(
             UserContact(
                 image = "",
                 name = "",

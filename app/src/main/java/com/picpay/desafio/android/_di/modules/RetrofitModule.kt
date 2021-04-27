@@ -1,4 +1,4 @@
-package com.picpay.desafio.android.di.modules
+package com.picpay.desafio.android._di.modules
 
 import android.content.Context
 import com.picpay.desafio.android.BuildConfig

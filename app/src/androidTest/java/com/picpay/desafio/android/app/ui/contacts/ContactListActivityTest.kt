@@ -49,27 +49,7 @@ class ContactListActivityTest {
     }
 
     @Test
-    fun shouldShowRefresh_whenSwipeScreenForDown_Success() {
-        rule.scenario.apply {
-            moveToState(Lifecycle.State.RESUMED)
-            onView(withId(R.id.swipeRefresh))
-                .perform(ViewMatchers().withCustomConstraints(swipeDown(), isDisplayingAtLeast(85)))
-                .check(matches(isDisplayed()))
-        }
-    }
-
-    @Test
-    fun shouldShowRefresh_whenSwipeScreenForDown_Error() {
-        rule.scenario.apply {
-            moveToState(Lifecycle.State.RESUMED)
-            onView(withId(R.id.swipeRefresh))
-                .perform(ViewMatchers().withCustomConstraints(swipeDown(), isDisplayingAtLeast(85)))
-                .check(matches(not(isDisplayed())))
-        }
-    }
-
-    @Test
-    fun shouldDisplayLastItem_whenScrollScreenForLastPosition_Sucess() {
+    fun shouldDisplayLastItem_whenScrollScreenForLastPosition_Success() {
         val activity = getActivity(rule)
         val nameInLastPosition = activity.adapter.contacts.last().name
         val lastPosition = activity.adapter.contacts.size - 1

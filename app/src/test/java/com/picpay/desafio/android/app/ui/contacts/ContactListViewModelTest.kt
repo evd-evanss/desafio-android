@@ -8,6 +8,7 @@ import com.picpay.desafio.android.app.rules.TestCoroutineRule
 import com.picpay.desafio.android.data.repository.ContactsRepositoryTest
 import com.picpay.desafio.android.domain.model.local.UserContact
 import com.picpay.desafio.android.utils.extensions.startCollect
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class ContactListViewModelTest {
 
@@ -41,7 +43,7 @@ class ContactListViewModelTest {
     }
 
     @Test
-    fun `GIVEN that the user opens the application, WHEN for the first time, THEN I must enable loading, load contacts and disable loading`() {
+    fun `GIVEN that my contact list is empty, WHEN the user opens the app, THEN I must enable loading, load contacts and disable loading`() {
         coroutinesTestRule.testDispatcher.runBlockingTest {
             // Action
             viewModel.handle(ContactListIntent.GetContacts)
@@ -50,7 +52,7 @@ class ContactListViewModelTest {
             fakeRepository.fetchContacts().startCollect(
                 coroutineScope = this,
                 onLoading = {
-                    verify(state, atLeastOnce()).onChanged(ContactListState.DisplayRefresh(it))
+                    verify(state, atLeastOnce()).onChanged(ContactListState.DisplayLoading(it))
                 },
                 onSuccess = {
                     verify(state, atLeastOnce()).onChanged(ContactListState.LoadContacts(it))
@@ -60,29 +62,10 @@ class ContactListViewModelTest {
     }
 
     @Test
-    fun `Given that I have the option to update the contact list, When I pull the screen down, THEN I must enable loading, load contacts and disable loading`() {
-        coroutinesTestRule.testDispatcher.runBlockingTest {
-            // Action
-            viewModel.handle(ContactListIntent.RefreshContacts())
-
-            // Assert
-            fakeRepository.fetchContacts().startCollect(
-                coroutineScope = this,
-                onLoading = {
-                    verify(state, atLeastOnce()).onChanged(ContactListState.DisplayRefresh(it))
-                },
-                onSuccess = {
-                    verify(state, atLeastOnce()).onChanged(ContactListState.LoadContacts(it))
-                }
-            )
-        }
-    }
-
-    @Test
-    fun `GIVEN given that screen rotation is enabled, WHEN user rotate the screen, THEN then I must load the list with locally saved data`() {
+    fun `GIVEN that my contact list is not empty, WHEN user rotate the screen, THEN then I must load the list with locally saved data`() {
         coroutinesTestRule.testDispatcher.runBlockingTest {
             // Arrange
-            viewModel.contactList.add(
+            viewModel.localContactList.add(
                 UserContact("", "Evandro", 3, "@evandro.costa")
             )
             // Action
@@ -90,7 +73,7 @@ class ContactListViewModelTest {
 
             // Assert
             verify(state, atLeastOnce()).onChanged(
-                ContactListState.LoadSavedContacts(contacts = viewModel.contactList)
+                ContactListState.LoadSavedContacts(contacts = viewModel.localContactList)
             )
         }
     }

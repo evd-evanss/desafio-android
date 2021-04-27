@@ -7,6 +7,7 @@ import com.picpay.desafio.android.R
 import com.picpay.desafio.android.app.base.BaseActivity
 import com.picpay.desafio.android.databinding.ActivityContactsBinding
 import com.picpay.desafio.android.domain.model.local.UserContact
+import com.picpay.desafio.android.utils.extensions.setVisible
 import com.picpay.desafio.android.utils.extensions.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,8 +23,7 @@ class ContactListActivity : BaseActivity<ActivityContactsBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initUi()
-        setListeners()
-        setObservers()
+        initObservers()
         viewModel.handle(ContactListIntent.GetContacts)
     }
 
@@ -34,28 +34,22 @@ class ContactListActivity : BaseActivity<ActivityContactsBinding>() {
         recyclerView.layoutManager = LinearLayoutManager(this@ContactListActivity)
     }
 
-    private fun setListeners() = binding.run {
-        swipeRefresh.setOnRefreshListener {
-            viewModel.handle(ContactListIntent.RefreshContacts())
-        }
-    }
-
-    private fun setObservers() = viewModel.state.observe(this@ContactListActivity) { state ->
+    private fun initObservers() = viewModel.state.observe(this@ContactListActivity) { state ->
         when (state) {
-            is ContactListState.LoadContacts -> loadContacts(contacts = state.contacts)
-            is ContactListState.LoadSavedContacts -> loadContacts(contacts = state.contacts)
+            is ContactListState.LoadContacts -> displayContacts(contacts = state.contacts)
+            is ContactListState.LoadSavedContacts -> displayContacts(contacts = state.contacts)
             is ContactListState.DisplayError -> displayError()
-            is ContactListState.DisplayRefresh -> displayRefresh(isRefresh = state.isRefresh)
+            is ContactListState.DisplayLoading -> displayLoading(isLoading = state.isLoading)
         }
     }
 
-    private fun loadContacts(contacts: List<UserContact>) = binding.run{
+    private fun displayContacts(contacts: List<UserContact>) = binding.run{
         adapter.contacts = contacts
     }
 
     private fun displayError() = showToast(getString(R.string.error))
 
-    private fun displayRefresh(isRefresh: Boolean) = binding.run {
-        swipeRefresh.isRefreshing = isRefresh
+    private fun displayLoading(isLoading: Boolean) = binding.run {
+        contactListLoadingPb.setVisible(isLoading)
     }
 }

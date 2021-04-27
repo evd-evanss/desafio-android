@@ -6,5 +6,5 @@ sealed class ContactListState {
     object DisplayError : ContactListState()
     data class LoadContacts(val contacts: List<UserContact>) : ContactListState()
     data class LoadSavedContacts(val contacts: List<UserContact>) : ContactListState()
-    data class DisplayRefresh(val isRefresh: Boolean) : ContactListState()
+    data class DisplayLoading(val isLoading: Boolean) : ContactListState()
 }
