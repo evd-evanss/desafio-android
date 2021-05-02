@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.verify
-import com.picpay.desafio.android.app.rules.TestCoroutineRule
+import com.picpay.desafio.android.rules.TestCoroutineRule
 import com.picpay.desafio.android.data.repository.ContactsRepositoryTest
 import com.picpay.desafio.android.domain.model.local.UserContact
 import com.picpay.desafio.android.utils.extensions.startCollect
@@ -44,13 +44,13 @@ class ContactListViewModelTest {
 
     @Test
     fun `GIVEN that my contact list is empty, WHEN the user opens the app, THEN I must enable loading, load contacts and disable loading`() {
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.dispatcher.runBlockingTest {
             // Action
             viewModel.handle(ContactListIntent.GetContacts)
 
             // Assert
             fakeRepository.fetchContacts().startCollect(
-                coroutineScope = this,
+                scope = this,
                 onLoading = {
                     verify(state, atLeastOnce()).onChanged(ContactListState.DisplayLoading(it))
                 },
@@ -63,7 +63,7 @@ class ContactListViewModelTest {
 
     @Test
     fun `GIVEN that my contact list is not empty, WHEN user rotate the screen, THEN then I must load the list with locally saved data`() {
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.dispatcher.runBlockingTest {
             // Arrange
             viewModel.localContactList.add(
                 UserContact("", "Evandro", 3, "@evandro.costa")
