@@ -6,7 +6,10 @@ import com.picpay.desafio.android.data.source.ContactDataSourceFake
 import com.picpay.desafio.android.domain.local.UserContactFake
 import com.picpay.desafio.android.domain.mapper.ContactsMapperFake
 import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
@@ -39,9 +42,9 @@ class DataTest {
 
     @Test
     fun shouldFetchContactsWith_Error() = runBlockingTest {
-        repository.fetchContactsError().collect {
-            assertEquals(expectedUsers, it)
-        }
+        repository.fetchContactsError().catch {
+            assertEquals(expectedMessage, it.message)
+        }.launchIn(this)
     }
 
     companion object {
