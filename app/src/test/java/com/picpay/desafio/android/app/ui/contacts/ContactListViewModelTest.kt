@@ -50,7 +50,7 @@ class ContactListViewModelTest {
 
             // Assert
             fakeRepository.fetchContacts().startCollect(
-                coroutineScope = this,
+                scope = this,
                 onLoading = {
                     verify(state, atLeastOnce()).onChanged(ContactListState.DisplayLoading(it))
                 },

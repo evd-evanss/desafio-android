@@ -30,7 +30,7 @@ class ContactListViewModel @Inject constructor(
     }
 
     private fun fetchContactsInApi() = repository.fetchContacts().startCollect(
-        coroutineScope = viewModelScope,
+        scope = viewModelScope,
         onLoading = { isLoading ->
             _state.value = ContactListState.DisplayLoading(isLoading = isLoading)
         },
