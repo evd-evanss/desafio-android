@@ -1,9 +1,9 @@
 package com.picpay.desafio.android.domain
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.picpay.desafio.android.rules.TestCoroutineRule
-import com.picpay.desafio.android.domain.mapper.ContactsMapperFake
 import com.picpay.desafio.android.data.source.ContactDataSourceFake
+import com.picpay.desafio.android.domain.mapper.ContactsMapperFake
+import com.picpay.desafio.android.rules.TestCoroutineRule
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.onEach
@@ -52,14 +52,14 @@ class DomainTest {
     }
 
     @Test
-    fun shouldConverterResponseToModel_Error() = runBlockingTest {
+    fun shouldConverterResponseToModel_WithNullSafe() = runBlockingTest {
         mapperFake.responseToModel(service.fetchUsersWithFieldsNull())
             .onEach { model ->
                 model.forEach {
-                    assertEquals("www.google.com", it.image)
+                    assertEquals("", it.image)
                     assertEquals("Evandro", it.name)
-                    assertEquals("@evandro.costa", it.username)
-                    assertEquals(0, it.id)
+                    assertEquals("", it.username)
+                    assertEquals(2, it.id)
                 }
             }
             .stateIn(this)
